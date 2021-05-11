@@ -8,7 +8,8 @@
     "build": "ng build --prod && tauri build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "version": "json -I -f scr-tauri/tauri.conf.json -e 'this.package.version=$VERSION'"
   },
   "private": true,
   "dependencies": {
