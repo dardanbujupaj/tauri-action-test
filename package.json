@@ -1,6 +1,6 @@
 {
   "name": "tauri-test",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "scripts": {
     "ng": "ng",
     "tauri": "tauri",
@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "version": "json -I -f src-tauri/tauri.conf.json -e 'this.package.version=$VERSION'"
+    "version": "json -I -f src-tauri/tauri.conf.json -e \"this.package.version=$VERSION\""
   },
   "private": true,
   "dependencies": {
