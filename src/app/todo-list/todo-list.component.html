@@ -1,0 +1,5 @@
+<div id="content">
+  <ul>
+    <li *ngFor="let todo of todos" (click)="todo.done = !todo.done" [ngStyle]="{'text-decoration': todo.done ? 'line-through' : 'none'}">{{todo.name}}</li>
+  </ul>
+</div>
