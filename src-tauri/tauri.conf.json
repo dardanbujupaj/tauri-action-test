@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "tauri-test",
-    "version": "0.2.3"
+    "version": "$npm_package_version"
   },
   "build": {
     "distDir": "../dist/tauri-test",
