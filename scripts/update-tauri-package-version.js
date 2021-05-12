@@ -1,7 +1,7 @@
 const { execSync } = require('child_process')
 
 // const version = process.argv[2]
-const version = process.env['node_package_version']
+const version = process.env['npm_package_version']
 
 const tauriConf = 'src-tauri/tauri.conf.json'
 
