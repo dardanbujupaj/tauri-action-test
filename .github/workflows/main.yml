@@ -14,6 +14,7 @@ jobs:
     steps:
     - name: get tag from version
       id: tag_version
+      shell: bash
       run: |
         echo "::set-output name=TAG_VERSION::${GITHUB_REF/refs\/tags\//}"
     - run: echo ${{ steps.tag_version.outputs.TAG_VERSION }}
