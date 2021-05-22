@@ -1,6 +1,6 @@
 {
   "name": "tauri-test",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "scripts": {
     "ng": "ng",
     "tauri": "tauri",
