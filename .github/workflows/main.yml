@@ -15,7 +15,7 @@ jobs:
     - name: get tag from version
       id: tag_version
       run: |
-        echo "::set-output name=TAG_VERSION::${GITHUB_REF#refs/tags/v}"
+        echo ::set-output name=TAG_VERSION::${GITHUB_REF/refs\/tags\//}
     - run: echo ${{ steps.tag_version.outputs.TAG_VERSION }}
     - uses: actions/checkout@v2
     - name: setup node
@@ -37,7 +37,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tagName: v${{ steps.tag_version.outputs.TAG_VERSION }}
-        releaseName: LegiSlate-v${{ steps.tag_version.outputs.TAG_VERSION }}
+        tagName: ${{ steps.tag_version.outputs.TAG_VERSION }}
+        releaseName: LegiSlate-${{ steps.tag_version.outputs.TAG_VERSION }}
         body: "See the assets to download this version and install."
         prerelease: false
