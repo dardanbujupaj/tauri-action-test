@@ -15,6 +15,6 @@ interface Todo {
 export class AppComponent {
   title = 'tauri-test';
   constructor() {
-    console.log(getVersion)
+    getVersion().then(console.log)
   }
 }
