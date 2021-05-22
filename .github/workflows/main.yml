@@ -31,12 +31,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y webkit2gtk-4.0
     - name: install app dependencies and build it
-      run: yarn && yarn build
+      run: npm ci && npm run build
     - uses: tauri-apps/tauri-action@v0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tagName: app-v${{ steps.tag_version.outputs.TAG_VERSION}}
+        tagName: v${{ steps.tag_version.outputs.TAG_VERSION}}
         releaseName: LegiSlate-v${{ steps.tag_version.outputs.TAG_VERSION}}
         body: "See the assets to download this version and install."
         prerelease: false
