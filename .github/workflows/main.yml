@@ -15,7 +15,7 @@ jobs:
     - name: get tag from version
       id: tag_version
       run: |
-        echo '::set-output name=TAG_VERSION::${GITHUB_REF/refs\/tags\//}'
+        echo '::set-output name=TAG_VERSION::${{GITHUB_REF/refs\/tags\//}}'
     - run: echo ${{ steps.tag_version.outputs.TAG_VERSION }}
     - uses: actions/checkout@v2
     - name: setup node
