@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { getVersion } from '@tauri-apps/api/app'
 
 
 interface Todo {
@@ -13,4 +14,7 @@ interface Todo {
 })
 export class AppComponent {
   title = 'tauri-test';
+  constructor() {
+    console.log(getVersion)
+  }
 }
