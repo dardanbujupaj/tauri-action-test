@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "tauri-test",
-    "version": "0.6.0"
+    "version": "0.7.0"
   },
   "build": {
     "distDir": "../dist/tauri-test",
@@ -48,7 +48,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-          "https://dbws.ch/legislate.json"
+        "https://dbws.ch/legislate.json"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE3MTNDN0M0MTQwQkMwRjAKUldUd3dBc1V4TWNUcDc2QnI0T3MybFQ4dWVPdnlnaDNxbE1uOGk4dmtDZmRualIvWDVEYXVkclAK"
