@@ -5,7 +5,7 @@
     "ng": "ng",
     "tauri": "tauri",
     "start": "concurrently 'ng serve' 'wait-on http://localhost:4200/ && tauri dev'",
-    "build": "ng build --prod && tauri build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
