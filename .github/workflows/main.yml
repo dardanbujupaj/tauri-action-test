@@ -23,7 +23,7 @@ jobs:
         echo "::set-output name=PREVIOUS_VERSION::$PREVIOUS_VERSION"
     - id: generate
       run: |
-        CHANGELOG=$(git log --pretty=format:'%s' ${{steps.previous_version.outputs.PREVIOUS_VERSION}}..${{steps.current_version.outputs.CURRENT_VERSION}})
+        CHANGELOG=$(git log --pretty=format:'%s' ${{steps.previous_version.outputs.PREVIOUS_VERSION}}..${{steps.current_version.outputs.CURRENT_VERSION}} --skip=1)
         echo "::set-output name=CHANGELOG::$CHANGELOG"
 
   publish-tauri:
