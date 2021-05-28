@@ -25,6 +25,7 @@ jobs:
         echo "::set-output name=CHANGELOG::$CHANGELOG"
 
   publish-tauri:
+    needs: generate-changelog
     strategy:
       fail-fast: false
       matrix:
@@ -66,5 +67,5 @@ jobs:
       with:
         tagName: ${{ steps.tag_version.outputs.TAG_VERSION }}
         releaseName: LegiSlate-${{ steps.tag_version.outputs.TAG_VERSION }}
-        releaseBody: ${{ jobs.generate-changelog.outputs.CHANGELOG}}
+        releaseBody: ${{ needs.generate-changelog.outputs.CHANGELOG}}
         prerelease: false
