@@ -7,7 +7,7 @@ jobs:
   generate-changelog:
     runs-on: ubuntu-latest
     outputs:
-      changelog: ${{steps.generate.outputs.CHANGELOG}}
+      CHANGELOG: ${{steps.generate.outputs.CHANGELOG}}
     steps:
     - name: get tag from version
       id: current_version
