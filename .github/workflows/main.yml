@@ -20,7 +20,7 @@ jobs:
     - id: previous_version
       run: |
         PREVIOUS_VERSION=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1 --max-count=1`)
-        echo "::set-output name=TAG_VERSION::$PREVIOUS_VERSION"
+        echo "::set-output name=PREVIOUS_VERSION::$PREVIOUS_VERSION"
     - id: generate
       run: |
         CHANGELOG=$(git log --pretty=format:'%s' ${{steps.previous_version.outputs.PREVIOUS_VERSION}}..${{steps.current_version.outputs.CURRENT_VERSION}}
