@@ -18,7 +18,6 @@ serde = { version = "1.0", features = [ "derive" ] }
 
   [dependencies.tauri]
   version = "1.0.0-beta"
-features = []
 
 [features]
 default = [ "custom-protocol" ]
