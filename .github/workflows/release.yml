@@ -1,0 +1,93 @@
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  Version:
+    # needs: Test
+    outputs:
+      tag: ${{ steps.version.outputs.version }}
+      version: ${{ steps.version.outputs.version-without-v }}
+      is_prerelease: ${{ steps.version.outputs.prerelease != '' }}
+      # version_without_prerelease: ${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: version
+        uses: battila7/get-version-action@v2
+  Changelog:
+    needs: Version
+    runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{steps.build_changelog.outputs.changelog}}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Changelog
+      id: build_changelog
+      uses: mikepenz/release-changelog-builder-action@v2
+      with:
+        configuration: ".github/config/changelog.json"
+        ignorePreReleases: ${{ needs.Version.outputs.is_prerelease != true }} # ignore prereleases for actual releases
+        commitMode: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  GenerateRelease:
+    outputs:
+      releaseId: ${{ steps.tauri_action.outputs.releaseId }}
+    needs: [Version, Changelog]
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+    timeout-minutes: 30
+    
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: install Rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: install webkit2gtk (ubuntu only)
+      if: matrix.platform == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y webkit2gtk-4.0
+    - name: install app dependencies and build it
+      run: npm ci && npm run build
+    - uses: tauri-apps/tauri-action@v0
+      id: tauri_action
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+        APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+        TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+      with:
+        tagName: ${{ needs.Version.outputs.tag }}
+        releaseName: LegiSlate-${{ needs.Version.outputs.version }}
+        releaseBody: ${{ needs.Changelog.outputs.changelog}}
+        prerelease: ${{ needs.Version.outputs.is_prerelease }}
+        releaseDraft: true
+
+  PublishRelease:
+    needs: GenerateRelease
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@v5
+      with:
+        script: |
+          github.rest.repos.updateRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            releaseId: ${{ needs.GenerateRelease.outputs.releaseId }}
+            draf: false
+          })
