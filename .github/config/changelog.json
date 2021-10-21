@@ -5,9 +5,9 @@
 			"labels": []
 		}
 	],
-	"template": "${{CHANGELOG}}\n\nUncategorized:\n${{UNCATEGORIZED}}\n\nIgnored:\n${{IGNORED}}\n\n${{UNCATEGORIZED_COUNT}}\n${{IGNORED_COUNT}}",
+	"template": "${{CHANGELOG}}\n\n${{OWNER}}\n${{REPO}}\n${{FROM_TAG}}\n${{TO_TAG}}",
 	"pr_template": "- ${{TITLE}}\n",
-	"empty_template": "${{OWNER}}\n${{REPO}}\n${{FROM_TAG}}\n${{TO_TAG}}",
+	"empty_template": "- no changes\n\n${{OWNER}}\n${{REPO}}\n${{FROM_TAG}}\n${{TO_TAG}}",
 	"max_pull_requests": 1000,
 	"max_back_track_time_days": 1000
 }
