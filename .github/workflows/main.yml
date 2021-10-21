@@ -75,4 +75,4 @@ jobs:
         releaseName: LegiSlate-${{ needs.Version.outputs.version }}
         releaseBody: ${{ needs.Changelog.outputs.changelog}}
         prerelease: ${{ needs.Version.outputs.is_prerelease }}
-        draft: true
+        releaseDraft: true
