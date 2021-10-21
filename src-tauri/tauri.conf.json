@@ -1,7 +1,7 @@
 {
   "package": {
     "productName": "tauri-test",
-    "version": "0.9.0-alpha.5"
+    "version": "0.9.0"
   },
   "build": {
     "distDir": "../dist/tauri-test",
