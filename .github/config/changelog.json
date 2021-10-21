@@ -5,9 +5,9 @@
 			"labels": []
 		}
 	],
-	"template": "${{CHANGELOG}}\n\n${{OWNER}}\n${{REPO}}\n${{FROM_TAG}}\n${{TO_TAG}}",
+	"template": "${{CHANGELOG}}\n\nhttps://github.com/${{OWNER}}/${{REPO}}/compare/${{FROM_TAG}}...${{TO_TAG}}",
 	"pr_template": "- ${{TITLE}}\n",
-	"empty_template": "- no changes\n\n${{OWNER}}\n${{REPO}}\n${{FROM_TAG}}\n${{TO_TAG}}",
+	"empty_template": "- no changes\n\nhttps://github.com/${{OWNER}}/${{REPO}}/compare/${{FROM_TAG}}...${{TO_TAG}}",
 	"max_pull_requests": 1000,
 	"max_back_track_time_days": 1000
 }
