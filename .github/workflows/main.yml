@@ -4,30 +4,39 @@ on:
       - 'v*'
 
 jobs:
-  generate-changelog:
+  Version:
+    # needs: Test
+    outputs:
+      tag: ${{ steps.version.outputs.version }}
+      version: ${{ steps.version.outputs.version-without-v }}
+      is_prerelease: ${{ steps.version.outputs.prerelase != '' }}
+      # version_without_prerelease: ${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: version
+        uses: battila7/get-version-action@v2
+      - id: check_prerelease
+        run: |
+          echo ${{ steps.version.outputs.prerelease }}
+          echo ${{ steps.version.outputs.prerelease != '' }}
+  Changelog:
+    needs: Version
     runs-on: ubuntu-latest
     outputs:
-      CHANGELOG: ${{steps.generate.outputs.CHANGELOG}}
+      changelog: ${{steps.build_changelog.outputs.changelog}}
     steps:
-    - name: get tag from version
-      id: current_version
-      shell: bash
-      run: |
-        echo "::set-output name=CURRENT_VERSION::${GITHUB_REF/refs\/tags\//}"
-    - uses: actions/checkout@v2
+    - name: Build Changelog
+      id: build_changelog
+      uses: mikepenz/release-changelog-builder-action@v2
       with:
-        fetch-depth: 0
-    - id: previous_version
-      run: |
-        PREVIOUS_VERSION=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1 --max-count=1`)
-        echo "::set-output name=PREVIOUS_VERSION::$PREVIOUS_VERSION"
-    - id: generate
-      run: |
-        CHANGELOG=$(git log --pretty=format:'%s' ${{steps.previous_version.outputs.PREVIOUS_VERSION}}..${{steps.current_version.outputs.CURRENT_VERSION}} --skip=1)
-        echo "::set-output name=CHANGELOG::$CHANGELOG"
+        ignorePreReleases: ${{ !needs.Version.outputs.is_prerelease }} # ignore prereleases for actual releases
+        commitMode: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  publish-tauri:
-    needs: generate-changelog
+  Publish:
+    needs: [Version, Changelog]
     strategy:
       fail-fast: false
       matrix:
@@ -36,17 +45,11 @@ jobs:
     
     runs-on: ${{ matrix.platform }}
     steps:
-    - name: get tag from version
-      id: tag_version
-      shell: bash
-      run: |
-        echo "::set-output name=TAG_VERSION::${GITHUB_REF/refs\/tags\//}"
-    - run: echo ${{ steps.tag_version.outputs.TAG_VERSION }}
     - uses: actions/checkout@v2
     - name: setup node
       uses: actions/setup-node@v1
       with:
-        node-version: 12
+        node-version: 14
     - name: install Rust stable
       uses: actions-rs/toolchain@v1
       with:
@@ -68,7 +71,8 @@ jobs:
         TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
       with:
-        tagName: ${{ steps.tag_version.outputs.TAG_VERSION }}
-        releaseName: LegiSlate-${{ steps.tag_version.outputs.TAG_VERSION }}
-        releaseBody: ${{ needs.generate-changelog.outputs.CHANGELOG}}
-        prerelease: false
+        tagName: ${{ needs.Version.outputs.tag }}
+        releaseName: LegiSlate-${{ needs.Version.outputs.version }}
+        releaseBody: ${{ needs.Changelog.outputs.changelog}}
+        prerelease: ${{ needs.Version.outputs.is_prerelease }}
+        draft: true
