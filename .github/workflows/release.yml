@@ -89,5 +89,5 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
             releaseId: ${{ needs.GenerateRelease.outputs.releaseId }}
-            draf: false
+            draft: false
           })
