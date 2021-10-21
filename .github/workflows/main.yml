@@ -16,10 +16,6 @@ jobs:
       - uses: actions/checkout@v2
       - id: version
         uses: battila7/get-version-action@v2
-      - id: check_prerelease
-        run: |
-          echo ${{ steps.version.outputs.prerelease }}
-          echo ${{ steps.version.outputs.prerelease != '' }}
   Changelog:
     needs: Version
     runs-on: ubuntu-latest
@@ -32,7 +28,7 @@ jobs:
       uses: mikepenz/release-changelog-builder-action@v2
       with:
         configuration: ".github/config/changelog.json"
-        ignorePreReleases: ${{ !needs.Version.outputs.is_prerelease }} # ignore prereleases for actual releases
+        ignorePreReleases: ${{ needs.Version.outputs.is_prerelease != true }} # ignore prereleases for actual releases
         commitMode: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
