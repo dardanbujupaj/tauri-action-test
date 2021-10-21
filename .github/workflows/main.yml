@@ -9,7 +9,7 @@ jobs:
     outputs:
       tag: ${{ steps.version.outputs.version }}
       version: ${{ steps.version.outputs.version-without-v }}
-      is_prerelease: ${{ steps.version.outputs.prerelase != '' }}
+      is_prerelease: ${{ steps.version.outputs.prerelease != '' }}
       # version_without_prerelease: ${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +30,7 @@ jobs:
       id: build_changelog
       uses: mikepenz/release-changelog-builder-action@v2
       with:
+        configuration: ".github/config/changelog.json"
         ignorePreReleases: ${{ !needs.Version.outputs.is_prerelease }} # ignore prereleases for actual releases
         commitMode: true
       env:
