@@ -88,6 +88,6 @@ jobs:
           github.rest.repos.updateRelease({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            releaseId: ${{ needs.GenerateRelease.outputs.releaseId }}
+            release_id: ${{ needs.GenerateRelease.outputs.releaseId }}
             draft: false
           })
